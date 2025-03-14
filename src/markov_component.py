@@ -84,20 +84,17 @@ def generate_story(markov_model, limit=100, start='Hello'):
         n+=1
     return story
 
-# Main
-def main():
-    print("Hello")
-    # download_novel() # i comment this temporary because it's already downloaded TODO: don't downlad if already downloaded
-    cleaned_text= count_words()
-    markov_model = make_markov_model(cleaned_text,2)
-    castle_keys_list = list(markov_model.keys())
-    #print(castle_keys_list)
-    print("Number of states =", len(markov_model.keys()))
 
-    story = generate_story(markov_model=markov_model,start='dark lantern')
+class MarkovFacade:
+    def __init__(self):
+        self.limit=100
+        self.novel_path= "./src/data/the_castle_kafka.txt"
+        self.n_gram=2
+        self.story_start='dark lantern'
 
-    print(story)
-
-
-if __name__=='__main__':
-    sys.exit(main())
+    def get_story(self):
+        download_novel()
+        cleaned_text= count_words()
+        markov_model = make_markov_model(cleaned_text,self.n_gram)
+        story = generate_story(markov_model=markov_model,start=self.story_start)
+        return story
